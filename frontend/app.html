@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InterviewIQ — AI Interview Prep</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0a0f;--bg2:#0d0d18;--bg3:#0f1020;--bg4:#131428;
+  --cyan:#00d4ff;--blue:#0066ff;--purple:#6600ff;
+  --txt:#e8f4ff;--txt2:#7a9bbe;--txt3:#3d5a78;
+  --bdr:rgba(0,212,255,.15);--bdr2:rgba(0,212,255,.45);
+  --ok:#00ff88;--warn:#ffaa00;--err:#ff4466;
+  --ff:'Orbitron',monospace;--fb:'Inter',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--txt);font-family:var(--fb);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(0,212,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.03) 1px,transparent 1px);
+  background-size:50px 50px}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:100;background:rgba(10,10,15,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);padding:0 24px}
+.hdr{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+.logo-icon{width:38px;height:38px;background:linear-gradient(135deg,var(--blue),var(--cyan));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 0 18px rgba(0,102,255,.5)}
+.logo-text{font-family:var(--ff);font-size:19px;font-weight:700;background:linear-gradient(135deg,var(--cyan),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:2px}
+.logo-sub{font-size:9px;color:var(--txt3);letter-spacing:1px;font-family:var(--ff)}
+.badge{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--txt2);font-family:var(--ff);letter-spacing:1px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok);animation:pulse 2s infinite}
+
+/* HERO */
+.hero{position:relative;z-index:1;text-align:center;padding:52px 24px 32px}
+.hero-eye{font-family:var(--ff);font-size:10px;letter-spacing:4px;color:var(--cyan);margin-bottom:16px;opacity:.8}
+.hero h1{font-family:var(--ff);font-size:clamp(24px,5vw,54px);font-weight:900;line-height:1.1;background:linear-gradient(135deg,#fff 0%,var(--cyan) 50%,var(--blue) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:14px}
+.hero p{font-size:15px;color:var(--txt2);max-width:520px;margin:0 auto 26px;line-height:1.7}
+.hero-stats{display:flex;justify-content:center;gap:36px;flex-wrap:wrap}
+.stat-n{font-family:var(--ff);font-size:20px;font-weight:700;color:var(--cyan)}
+.stat-l{font-size:10px;color:var(--txt3);letter-spacing:1px;margin-top:2px}
+
+/* TABS */
+.tabs-wrap{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:0 20px 60px}
+.tabs-nav{display:flex;gap:4px;background:var(--bg3);border:1px solid var(--bdr);border-radius:14px;padding:5px;margin-bottom:24px;overflow-x:auto;scrollbar-width:none}
+.tabs-nav::-webkit-scrollbar{display:none}
+.tab-btn{flex:1;min-width:120px;padding:11px 12px;background:transparent;border:1px solid transparent;border-radius:10px;color:var(--txt3);font-family:var(--fb);font-size:13px;font-weight:500;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:7px;white-space:nowrap}
+.tab-btn:hover{color:var(--txt2);background:rgba(0,212,255,.05);border-color:var(--bdr)}
+.tab-btn.active{background:linear-gradient(135deg,rgba(0,102,255,.2),rgba(0,212,255,.15));border-color:var(--bdr2);color:var(--cyan);box-shadow:0 0 20px rgba(0,212,255,.08)}
+.tab-panel{display:none;animation:fadeUp .3s ease}
+.tab-panel.active{display:block}
+
+/* CARD */
+.card{background:var(--bg3);border:1px solid var(--bdr);border-radius:14px;padding:24px;position:relative;overflow:hidden;transition:border-color .3s;margin-bottom:18px}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:.35}
+.card:hover{border-color:rgba(0,212,255,.28)}
+.card-title{font-family:var(--ff);font-size:12px;font-weight:600;color:var(--cyan);letter-spacing:2px;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+
+/* FORM */
+.fg{margin-bottom:16px}
+.fl{display:block;font-size:11px;font-weight:600;color:var(--txt2);letter-spacing:1px;margin-bottom:6px;font-family:var(--ff)}
+textarea,input[type=text]{width:100%;background:var(--bg2);border:1px solid var(--bdr);border-radius:9px;color:var(--txt);font-family:var(--fb);font-size:14px;line-height:1.6;padding:13px 15px;resize:vertical;transition:all .3s;outline:none}
+textarea:focus,input[type=text]:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(0,212,255,.09);background:var(--bg4)}
+textarea::placeholder,input::placeholder{color:var(--txt3)}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 26px;border:none;border-radius:9px;font-family:var(--ff);font-size:11px;font-weight:600;letter-spacing:2px;cursor:pointer;transition:all .3s;text-transform:uppercase}
+.btn-p{background:linear-gradient(135deg,var(--blue),var(--cyan));color:#fff;box-shadow:0 4px 18px rgba(0,102,255,.4)}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,102,255,.55)}
+.btn-s{background:transparent;color:var(--cyan);border:1px solid var(--bdr2)}
+.btn-s:hover{background:rgba(0,212,255,.08);transform:translateY(-1px)}
+.btn-d{background:linear-gradient(135deg,#550011,var(--err));color:#fff}
+.btn-d:hover{transform:translateY(-2px)}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none!important}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+
+/* LOADER */
+.loader-wrap{display:flex;flex-direction:column;align-items:center;gap:14px;padding:44px}
+.loader{width:44px;height:44px;border:3px solid rgba(0,212,255,.1);border-top-color:var(--cyan);border-radius:50%;animation:spin .8s linear infinite}
+.loader-txt{font-family:var(--ff);font-size:10px;color:var(--cyan);letter-spacing:3px;animation:blink 1.4s ease-in-out infinite}
+
+/* SKILL TAGS */
+.skill-grid{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px}
+.stag{padding:5px 13px;border-radius:20px;font-size:12px;font-weight:500;border:1px solid;transition:all .2s;cursor:default}
+.stag.a{background:rgba(0,102,255,.1);border-color:rgba(0,102,255,.4);color:#6699ff}
+.stag.b{background:rgba(0,212,255,.08);border-color:rgba(0,212,255,.3);color:var(--cyan)}
+.stag.c{background:rgba(102,0,255,.1);border-color:rgba(102,0,255,.4);color:#aa66ff}
+.stag:hover{transform:translateY(-1px)}
+
+/* QUESTIONS */
+.sec-hdr{font-family:var(--ff);font-size:10px;letter-spacing:3px;color:var(--cyan);margin-bottom:12px;padding-bottom:7px;border-bottom:1px solid var(--bdr);opacity:.8}
+.qlist{list-style:none}
+.qitem{background:var(--bg4);border:1px solid var(--bdr);border-radius:9px;padding:14px 18px;margin-bottom:9px;display:flex;gap:12px;align-items:flex-start;transition:all .3s;position:relative;overflow:hidden}
+.qitem::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(to bottom,var(--blue),var(--cyan))}
+.qitem:hover{border-color:rgba(0,212,255,.28);transform:translateX(3px)}
+.qnum{font-family:var(--ff);font-size:10px;color:var(--cyan);min-width:22px;margin-top:2px;font-weight:700}
+.qtxt{flex:1;font-size:14px;line-height:1.6;color:var(--txt)}
+.qcat{font-size:9px;padding:2px 7px;border-radius:4px;font-family:var(--ff);letter-spacing:1px;white-space:nowrap;align-self:flex-start;margin-top:2px}
+.qcat.Technical{background:rgba(0,102,255,.2);color:#6699ff;border:1px solid rgba(0,102,255,.4)}
+.qcat.Behavioral{background:rgba(102,0,255,.2);color:#aa66ff;border:1px solid rgba(102,0,255,.4)}
+.qcat.Situational{background:rgba(0,180,90,.1);color:#00cc66;border:1px solid rgba(0,180,90,.3)}
+
+/* SCORE RING */
+.score-wrap{display:flex;align-items:center;gap:24px;padding:22px;background:var(--bg4);border:1px solid var(--bdr);border-radius:13px;margin-bottom:18px;flex-wrap:wrap}
+.score-ring-c{position:relative;width:100px;height:100px;flex-shrink:0}
+.score-ring-c svg{transform:rotate(-90deg);width:100px;height:100px}
+.sr-bg{fill:none;stroke:rgba(0,212,255,.1);stroke-width:8}
+.sr-fill{fill:none;stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset 1.2s ease}
+.sr-num-wrap{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.sr-num{font-family:var(--ff);font-size:24px;font-weight:800}
+.sr-lbl{font-size:9px;color:var(--txt3);letter-spacing:1px}
+.score-meta{flex:1}
+.score-title{font-family:var(--ff);font-size:17px;font-weight:700;margin-bottom:4px}
+.score-sub{color:var(--txt2);font-size:13px;line-height:1.6}
+
+.skill-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.sc-title{font-family:var(--ff);font-size:10px;letter-spacing:2px;margin-bottom:7px;padding-bottom:5px;border-bottom:1px solid}
+.sc-title.ok{color:var(--ok);border-color:rgba(0,255,136,.3)}
+.sc-title.bad{color:var(--err);border-color:rgba(255,68,102,.3)}
+.spill{display:inline-flex;align-items:center;margin:3px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:500}
+.spill.ok{background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.3);color:var(--ok)}
+.spill.bad{background:rgba(255,68,102,.08);border:1px solid rgba(255,68,102,.3);color:var(--err)}
+.gap-item{background:var(--bg4);border:1px solid rgba(255,170,0,.2);border-left:3px solid var(--warn);border-radius:8px;padding:11px 15px;margin-bottom:9px}
+.gap-area{font-family:var(--ff);font-size:9px;color:var(--warn);letter-spacing:1px;margin-bottom:3px}
+.gap-desc{font-size:13px;color:var(--txt2)}
+.rec-item{display:flex;align-items:flex-start;gap:9px;padding:8px 0;border-bottom:1px solid var(--bdr);font-size:13px;color:var(--txt2)}
+.rec-item:last-child{border-bottom:none}
+.rec-arr{color:var(--cyan);flex-shrink:0}
+
+/* STUDY GUIDE */
+.topic-card{background:var(--bg4);border:1px solid var(--bdr);border-radius:12px;overflow:hidden;margin-bottom:12px;transition:all .3s}
+.topic-card:hover{border-color:rgba(0,212,255,.28);box-shadow:0 6px 20px rgba(0,0,0,.3)}
+.topic-hdr{padding:14px 18px;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+.tpri{padding:2px 9px;border-radius:20px;font-size:9px;font-family:var(--ff);letter-spacing:1px;font-weight:600}
+.tpri.High{background:rgba(255,68,102,.15);border:1px solid rgba(255,68,102,.4);color:var(--err)}
+.tpri.Medium{background:rgba(255,170,0,.1);border:1px solid rgba(255,170,0,.3);color:var(--warn)}
+.tpri.Low{background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.3);color:var(--cyan)}
+.tname{flex:1;font-weight:600;font-size:14px}
+.ttime{font-size:10px;color:var(--txt3);font-family:var(--ff)}
+.tchev{color:var(--txt3);transition:transform .3s;font-size:11px}
+.topic-card.open .tchev{transform:rotate(180deg)}
+.topic-body{display:none;padding:0 18px 18px;border-top:1px solid var(--bdr)}
+.topic-card.open .topic-body{display:block}
+.tsec{font-family:var(--ff);font-size:9px;letter-spacing:2px;color:var(--txt3);margin:10px 0 6px}
+.ctag{display:inline-block;margin:2px;background:rgba(0,102,255,.1);border:1px solid rgba(0,102,255,.3);color:#7799ff;padding:3px 10px;border-radius:5px;font-size:12px}
+.ritem{display:flex;align-items:center;gap:7px;padding:4px 0;font-size:13px;color:var(--txt2)}
+.ritem::before{content:'⚡';font-size:11px}
+.tq{font-size:13px;color:var(--txt2);padding:4px 0;display:flex;gap:7px}
+.tq::before{content:'›';color:var(--cyan);font-size:15px;line-height:1.2;flex-shrink:0}
+
+/* MOCK INTERVIEW */
+.mock-arena{display:none}
+.mock-arena.active{display:block}
+.ibar{background:var(--bg4);border:1px solid var(--bdr);border-radius:9px;padding:11px 18px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
+.pdots{display:flex;gap:5px}
+.pdot{width:8px;height:8px;border-radius:50%;background:var(--bg3);border:1px solid var(--bdr);transition:all .3s}
+.pdot.done{background:var(--ok);border-color:var(--ok);box-shadow:0 0 5px var(--ok)}
+.pdot.cur{background:var(--cyan);border-color:var(--cyan);box-shadow:0 0 5px var(--cyan);animation:pulse 1.5s infinite}
+.q-display{background:var(--bg4);border:1px solid var(--bdr2);border-radius:13px;padding:24px;margin-bottom:16px;box-shadow:0 0 24px rgba(0,212,255,.04)}
+.q-lbl{font-family:var(--ff);font-size:9px;letter-spacing:3px;color:var(--txt3);margin-bottom:12px;display:flex;align-items:center;gap:9px}
+.qbadge{padding:2px 7px;border-radius:4px;font-size:8px;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.3);color:var(--cyan)}
+.q-text-main{font-size:16px;line-height:1.7;color:var(--txt);font-weight:500}
+.fb-card{background:var(--bg4);border:1px solid var(--bdr);border-radius:12px;padding:18px;margin-bottom:14px;border-left:3px solid var(--cyan);animation:fadeUp .4s ease}
+.fb-hdr{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.fb-score-c{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--ff);font-size:14px;font-weight:800;flex-shrink:0}
+.fb-title{font-family:var(--ff);font-size:11px;letter-spacing:2px;color:var(--cyan)}
+.fb-sub{font-size:11px;color:var(--txt3);margin-top:2px}
+.fb-sec{font-family:var(--ff);font-size:9px;letter-spacing:2px;color:var(--txt3);margin:9px 0 5px}
+.fb-item{font-size:13px;color:var(--txt2);padding:3px 0;display:flex;gap:7px;align-items:flex-start}
+.fb-item.good::before{content:'✓';color:var(--ok);flex-shrink:0}
+.fb-item.bad::before{content:'△';color:var(--warn);flex-shrink:0}
+.fb-hint{background:rgba(0,212,255,.04);border:1px solid rgba(0,212,255,.12);border-radius:7px;padding:9px 13px;margin-top:9px;font-size:13px;color:var(--txt2);line-height:1.6}
+.fb-hint strong{color:var(--cyan);font-family:var(--ff);font-size:9px;letter-spacing:1px;display:block;margin-bottom:3px}
+.final-card{background:linear-gradient(135deg,rgba(0,102,255,.08),rgba(0,212,255,.04));border:1px solid var(--bdr2);border-radius:14px;padding:28px;text-align:center;animation:fadeUp .5s ease}
+.final-title{font-family:var(--ff);font-size:14px;font-weight:700;color:var(--cyan);margin-bottom:7px;letter-spacing:2px}
+.final-score{font-family:var(--ff);font-size:48px;font-weight:900;line-height:1}
+.final-sub{color:var(--txt2);font-size:13px;margin:7px 0 22px}
+.final-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;text-align:left;margin-bottom:18px}
+.fcol-title{font-family:var(--ff);font-size:9px;letter-spacing:2px;margin-bottom:7px;padding-bottom:4px;border-bottom:1px solid}
+.fcol-title.ok{color:var(--ok);border-color:rgba(0,255,136,.3)}
+.fcol-title.bad{color:var(--warn);border-color:rgba(255,170,0,.3)}
+.f-item{font-size:13px;color:var(--txt2);padding:3px 0;display:flex;gap:7px}
+.f-item.ok::before{content:'✓';color:var(--ok);flex-shrink:0}
+.f-item.bad::before{content:'→';color:var(--warn);flex-shrink:0}
+
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:768px){
+  .g2{grid-template-columns:1fr}
+  .hero h1{font-size:24px}
+  .tab-btn{min-width:90px;font-size:11px;padding:9px 7px}
+  .hdr .badge{display:none}
+  .skill-cols,.final-cols{grid-template-columns:1fr}
+  .score-wrap{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hdr">
+    <a class="logo" href="#">
+      <div class="logo-icon">⚡</div>
+      <div>
+        <div class="logo-text">INTERVIEWIQ</div>
+        <div class="logo-sub">AI INTERVIEW PREP SYSTEM</div>
+      </div>
+    </a>
+    <div class="badge"><div class="dot"></div>JARVIS ONLINE</div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-eye">▸ POWERED BY MINIMAX AI — YOUR PERSONAL INTERVIEW COACH</div>
+  <h1>Ace Every Interview<br>With AI Precision</h1>
+  <p>Analyze JDs, match your resume, build a study plan, and practice with a real AI interviewer — all in one command center.</p>
+  <div class="hero-stats">
+    <div><div class="stat-n">4</div><div class="stat-l">AI MODULES</div></div>
+    <div><div class="stat-n">∞</div><div class="stat-l">MOCK SESSIONS</div></div>
+    <div><div class="stat-n">100%</div><div class="stat-l">AI POWERED</div></div>
+    <div><div class="stat-n">FREE</div><div class="stat-l">NO SIGN-UP</div></div>
+  </div>
+</div>
+
+<div class="tabs-wrap">
+  <div class="tabs-nav">
+    <button class="tab-btn active" onclick="switchTab('jd')">🔍 JD Analyzer</button>
+    <button class="tab-btn" onclick="switchTab('resume')">📊 Resume Matcher</button>
+    <button class="tab-btn" onclick="switchTab('prep')">📚 Interview Prep</button>
+    <button class="tab-btn" onclick="switchTab('mock')">🤖 Mock Interview</button>
+  </div>
+
+  <!-- JD ANALYZER -->
+  <div id="tab-jd" class="tab-panel active">
+    <div class="g2">
+      <div class="card">
+        <div class="card-title">🔍 JD ANALYZER</div>
+        <div class="fg">
+          <label class="fl">JOB DESCRIPTION</label>
+          <textarea id="jd-input" rows="16" placeholder="Paste the full job description here...&#10;&#10;Include role, responsibilities, requirements..."></textarea>
+        </div>
+        <button class="btn btn-p" onclick="analyzeJD()" id="jd-btn">⚡ ANALYZE JD</button>
+      </div>
+      <div class="card">
+        <div class="card-title">📋 ANALYSIS RESULTS</div>
+        <div id="jd-output">
+          <div style="text-align:center;padding:56px 20px;color:var(--txt3)">
+            <div style="font-size:44px;margin-bottom:14px">🎯</div>
+            <div style="font-family:var(--ff);font-size:10px;letter-spacing:2px">PASTE A JD TO BEGIN</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESUME MATCHER -->
+  <div id="tab-resume" class="tab-panel">
+    <div class="g2">
+      <div class="card">
+        <div class="card-title">📊 RESUME MATCHER</div>
+        <div class="fg">
+          <label class="fl">JOB DESCRIPTION</label>
+          <textarea id="rm-jd" rows="7" placeholder="Paste the job description..."></textarea>
+        </div>
+        <div class="fg">
+          <label class="fl">YOUR RESUME</label>
+          <textarea id="rm-resume" rows="9" placeholder="Paste your resume content here...&#10;&#10;Work experience, skills, education, projects..."></textarea>
+        </div>
+        <button class="btn btn-p" onclick="matchResume()" id="rm-btn">📊 ANALYZE MATCH</button>
+      </div>
+      <div class="card">
+        <div class="card-title">📈 MATCH ANALYSIS</div>
+        <div id="rm-output">
+          <div style="text-align:center;padding:56px 20px;color:var(--txt3)">
+            <div style="font-size:44px;margin-bottom:14px">📊</div>
+            <div style="font-family:var(--ff);font-size:10px;letter-spacing:2px">PASTE JD + RESUME TO ANALYZE</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTERVIEW PREP -->
+  <div id="tab-prep" class="tab-panel">
+    <div class="card" style="max-width:680px">
+      <div class="card-title">📚 INTERVIEW PREP GENERATOR</div>
+      <div class="fg">
+        <label class="fl">JOB DESCRIPTION</label>
+        <textarea id="prep-jd" rows="8" placeholder="Paste the job description to generate a personalized study plan..."></textarea>
+      </div>
+      <button class="btn btn-p" onclick="generatePrep()" id="prep-btn">📚 GENERATE STUDY PLAN</button>
+    </div>
+    <div id="prep-output"></div>
+  </div>
+
+  <!-- MOCK INTERVIEW -->
+  <div id="tab-mock" class="tab-panel">
+    <div id="mock-setup" class="card" style="max-width:680px">
+      <div class="card-title">🤖 MOCK INTERVIEW</div>
+      <div class="fg">
+        <label class="fl">JOB DESCRIPTION (for context)</label>
+        <textarea id="mock-jd" rows="7" placeholder="Paste the job description so I can ask relevant questions..."></textarea>
+      </div>
+      <div class="fg">
+        <label class="fl">NUMBER OF QUESTIONS</label>
+        <input type="text" id="mock-count" value="5" style="width:80px">
+      </div>
+      <button class="btn btn-p" onclick="startMock()" id="mock-start-btn">🚀 START INTERVIEW</button>
+    </div>
+    <div id="mock-arena" class="mock-arena">
+      <div class="ibar">
+        <div style="font-family:var(--ff);font-size:10px;color:var(--cyan);letter-spacing:2px" id="mock-progress-label">QUESTION 1 OF 5</div>
+        <div class="pdots" id="mock-dots"></div>
+        <button class="btn btn-d" style="padding:7px 16px;font-size:9px" onclick="endMock()">⏹ END</button>
+      </div>
+      <div class="q-display">
+        <div class="q-lbl">JARVIS INTERVIEWER <span class="qbadge" id="mock-q-type">TECHNICAL</span></div>
+        <div class="q-text-main" id="mock-question">Loading question...</div>
+      </div>
+      <div id="mock-feedback-area"></div>
+      <div class="card" id="mock-answer-card">
+        <div class="card-title">💬 YOUR ANSWER</div>
+        <div class="fg">
+          <textarea id="mock-answer" rows="5" placeholder="Type your answer here...&#10;&#10;Take your time. Think out loud. Structure your response clearly."></textarea>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-p" onclick="submitAnswer()" id="mock-submit-btn">✓ SUBMIT ANSWER</button>
+          <button class="btn btn-s" onclick="skipQuestion()" id="mock-skip-btn">⏭ SKIP</button>
+        </div>
+      </div>
+      <div id="mock-final"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = 'https://interview-prep-k8ei.onrender.com';
+
+// API HELPER — direct call to backend
+async function apiCall(endpoint, payload) {
+  const r = await fetch(API + endpoint, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(payload)
+  });
+  if (!r.ok) throw new Error('Server error: ' + r.status);
+  return await r.json();
+}
+
+// TAB SWITCHING
+function switchTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+// LOADER HTML
+function loaderHTML(msg) {
+  return `<div class="loader-wrap"><div class="loader"></div><div class="loader-txt">${msg}</div></div>`;
+}
+
+// SCORE RING
+function scoreRing(score, color) {
+  const r = 42, c = 2*Math.PI*r;
+  const offset = c - (score/100)*c;
+  const label = score >= 80 ? 'EXCELLENT' : score >= 60 ? 'GOOD' : score >= 40 ? 'FAIR' : 'NEEDS WORK';
+  const textColor = score >= 80 ? 'var(--ok)' : score >= 60 ? 'var(--cyan)' : score >= 40 ? 'var(--warn)' : 'var(--err)';
+  return `<div class="score-ring-c">
+    <svg viewBox="0 0 100 100"><circle class="sr-bg" cx="50" cy="50" r="${r}"/><circle class="sr-fill" cx="50" cy="50" r="${r}" stroke="${textColor}" stroke-dasharray="${c}" stroke-dashoffset="${c}" style="--target:${offset}"/></svg>
+    <div class="sr-num-wrap"><div class="sr-num" style="color:${textColor}">${score}%</div><div class="sr-lbl">${label}</div></div>
+  </div>`;
+}
+
+function animateRings() {
+  document.querySelectorAll('.sr-fill').forEach(el => {
+    const t = el.style.getPropertyValue('--target');
+    setTimeout(() => { el.style.strokeDashoffset = t; }, 100);
+  });
+}
+
+// ═══════════════════════════════════════════
+// JD ANALYZER
+// ═══════════════════════════════════════════
+async function analyzeJD() {
+  const jd = document.getElementById('jd-input').value.trim();
+  if (!jd) { alert('Please paste a job description first.'); return; }
+  const btn = document.getElementById('jd-btn');
+  btn.disabled = true;
+  document.getElementById('jd-output').innerHTML = loaderHTML('ANALYZING JD...');
+  try {
+    const data = await apiCall('/analyze-jd', {jd});
+    renderJDResult(data);
+  } catch(e) {
+    document.getElementById('jd-output').innerHTML = `<div style="color:var(--err);padding:20px;font-family:var(--ff);font-size:12px">⚠ ERROR: ${e.message}</div>`;
+  }
+  btn.disabled = false;
+}
+
+function renderJDResult(d) {
+  const cats = ['a','b','c'];
+  const skillsHTML = (d.required_skills||[]).map((s,i)=>`<span class="stag ${cats[i%3]}">${s}</span>`).join('');
+  const topicsHTML = (d.study_topics||[]).map((s,i)=>`<span class="stag ${cats[(i+1)%3]}">${s}</span>`).join('');
+  const qHTML = (d.interview_questions||[]).map((q,i)=>`
+    <li class="qitem">
+      <span class="qnum">${String(i+1).padStart(2,'0')}</span>
+      <span class="qtxt">${q.question||q}</span>
+      <span class="qcat ${q.category||'Technical'}">${q.category||'Technical'}</span>
+    </li>`).join('');
+  document.getElementById('jd-output').innerHTML = `
+    <div style="animation:fadeUp .3s ease">
+      <div class="sec-hdr">REQUIRED SKILLS</div>
+      <div class="skill-grid">${skillsHTML}</div>
+      <div class="sec-hdr">STUDY TOPICS</div>
+      <div class="skill-grid">${topicsHTML}</div>
+      <div class="sec-hdr">LIKELY INTERVIEW QUESTIONS</div>
+      <ul class="qlist">${qHTML}</ul>
+      ${d.role_summary ? `<div class="sec-hdr" style="margin-top:18px">ROLE SUMMARY</div><p style="font-size:13px;color:var(--txt2);line-height:1.7">${d.role_summary}</p>` : ''}
+    </div>`;
+}
+
+// ═══════════════════════════════════════════
+// RESUME MATCHER
+// ═══════════════════════════════════════════
+async function matchResume() {
+  const jd = document.getElementById('rm-jd').value.trim();
+  const resume = document.getElementById('rm-resume').value.trim();
+  if (!jd || !resume) { alert('Please paste both JD and resume.'); return; }
+  const btn = document.getElementById('rm-btn');
+  btn.disabled = true;
+  document.getElementById('rm-output').innerHTML = loaderHTML('ANALYZING MATCH...');
+  try {
+    const data = await apiCall('/match-resume', {jd, resume});
+    renderResumeResult(data);
+  } catch(e) {
+    document.getElementById('rm-output').innerHTML = `<div style="color:var(--err);padding:20px;font-family:var(--ff);font-size:12px">⚠ ERROR: ${e.message}</div>`;
+  }
+  btn.disabled = false;
+}
+
+function renderResumeResult(d) {
+  const score = d.match_score || 0;
+  const color = score >= 80 ? 'var(--ok)' : score >= 60 ? 'var(--cyan)' : score >= 40 ? 'var(--warn)' : 'var(--err)';
+  const verdict = score >= 80 ? 'Strong Match' : score >= 60 ? 'Good Match' : score >= 40 ? 'Partial Match' : 'Weak Match';
+  const matchedHTML = (d.matched_skills||[]).map(s=>`<span class="spill ok">✓ ${s}</span>`).join('');
+  const missingHTML = (d.missing_skills||[]).map(s=>`<span class="spill bad">✗ ${s}</span>`).join('');
+  const gapsHTML = (d.gaps||[]).map(g=>`<div class="gap-item"><div class="gap-area">${g.area||'Gap'}</div><div class="gap-desc">${g.description||g}</div></div>`).join('');
+  const recsHTML = (d.recommendations||[]).map(r=>`<div class="rec-item"><span class="rec-arr">→</span>${r}</div>`).join('');
+  document.getElementById('rm-output').innerHTML = `
+    <div style="animation:fadeUp .3s ease">
+      <div class="score-wrap">
+        ${scoreRing(score, color)}
+        <div class="score-meta">
+          <div class="score-title" style="color:${color}">${verdict}</div>
+          <div class="score-sub">${d.summary || 'Analysis complete. See details below.'}</div>
+        </div>
+      </div>
+      <div class="skill-cols">
+        <div><div class="sc-title ok">✓ MATCHED SKILLS</div>${matchedHTML||'<span style="color:var(--txt3);font-size:12px">None detected</span>'}</div>
+        <div><div class="sc-title bad">✗ MISSING SKILLS</div>${missingHTML||'<span style="color:var(--txt3);font-size:12px">None detected</span>'}</div>
+      </div>
+      ${gapsHTML ? `<div class="sec-hdr">SKILL GAPS</div>${gapsHTML}` : ''}
+      ${recsHTML ? `<div class="sec-hdr">RECOMMENDATIONS</div>${recsHTML}` : ''}
+    </div>`;
+  animateRings();
+}
+
+// ═══════════════════════════════════════════
+// INTERVIEW PREP
+// ═══════════════════════════════════════════
+async function generatePrep() {
+  const jd = document.getElementById('prep-jd').value.trim();
+  if (!jd) { alert('Please paste a job description first.'); return; }
+  const btn = document.getElementById('prep-btn');
+  btn.disabled = true;
+  document.getElementById('prep-output').innerHTML = `<div class="card">${loaderHTML('GENERATING STUDY PLAN...')}</div>`;
+  try {
+    const data = await apiCall('/interview-prep', {jd});
+    renderPrepResult(data);
+  } catch(e) {
+    document.getElementById('prep-output').innerHTML = `<div class="card" style="color:var(--err);font-family:var(--ff);font-size:12px">⚠ ERROR: ${e.message}</div>`;
+  }
+  btn.disabled = false;
+}
+
+function renderPrepResult(d) {
+  const topicsHTML = (d.topics||[]).map(t => {
+    const conceptsHTML = (t.concepts||[]).map(c=>`<span class="ctag">${c}</span>`).join('');
+    const resourcesHTML = (t.resources||[]).map(r=>`<div class="ritem">${r}</div>`).join('');
+    const questionsHTML = (t.questions||[]).map(q=>`<div class="tq">${q}</div>`).join('');
+    return `<div class="topic-card">
+      <div class="topic-hdr" onclick="toggleTopic(this)">
+        <span class="tpri ${t.priority||'Medium'}">${t.priority||'Medium'}</span>
+        <span class="tname">${t.name}</span>
+        <span class="ttime">${t.study_time||'2-3h'}</span>
+        <span class="tchev">▼</span>
+      </div>
+      <div class="topic-body">
+        ${t.description ? `<p style="font-size:13px;color:var(--txt2);line-height:1.6;margin:12px 0 10px">${t.description}</p>` : ''}
+        ${conceptsHTML ? `<div class="tsec">KEY CONCEPTS</div>${conceptsHTML}` : ''}
+        ${resourcesHTML ? `<div class="tsec">RESOURCES</div>${resourcesHTML}` : ''}
+        ${questionsHTML ? `<div class="tsec">PRACTICE QUESTIONS</div><div style="background:var(--bg2);border-radius:7px;padding:9px">${questionsHTML}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+
+  const overallHTML = d.study_schedule ? `
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title">📅 STUDY SCHEDULE</div>
+      <p style="font-size:13px;color:var(--txt2);line-height:1.7">${d.study_schedule}</p>
+    </div>` : '';
+
+  document.getElementById('prep-output').innerHTML = `
+    <div style="animation:fadeUp .3s ease">
+      ${overallHTML}
+      <div class="sec-hdr">TOPIC-WISE STUDY PLAN</div>
+      ${topicsHTML || '<div style="color:var(--txt3);padding:20px;font-family:var(--ff);font-size:11px">No topics generated.</div>'}
+    </div>`;
+}
+
+function toggleTopic(hdr) {
+  hdr.parentElement.classList.toggle('open');
+}
+
+// ═══════════════════════════════════════════
+// MOCK INTERVIEW
+// ═══════════════════════════════════════════
+let mockState = { jd:'', questions:[], currentIdx:0, answers:[], feedbacks:[], totalQ:5 };
+
+async function startMock() {
+  const jd = document.getElementById('mock-jd').value.trim();
+  const count = parseInt(document.getElementById('mock-count').value) || 5;
+  if (!jd) { alert('Please paste a job description first.'); return; }
+  
+  const btn = document.getElementById('mock-start-btn');
+  btn.disabled = true; btn.textContent = 'INITIALIZING...';
+
+  mockState = { jd, questions:[], currentIdx:0, answers:[], feedbacks:[], totalQ:count };
+  
+  try {
+    const data = await apiCall('/mock-interview', { jd, previous_qa:[], user_answer:'', action:'start', total_questions:count });
+    mockState.questions.push(data);
+    document.getElementById('mock-setup').style.display = 'none';
+    const arena = document.getElementById('mock-arena');
+    arena.classList.add('active');
+    renderMockDots();
+    renderQuestion();
+  } catch(e) {
+    alert('Error: ' + e.message);
+  }
+  btn.disabled = false; btn.textContent = '🚀 START INTERVIEW';
+}
+
+function renderMockDots() {
+  const dots = document.getElementById('mock-dots');
+  dots.innerHTML = Array.from({length: mockState.totalQ}, (_,i) => {
+    let cls = i < mockState.currentIdx ? 'done' : i === mockState.currentIdx ? 'cur' : '';
+    return `<div class="pdot ${cls}"></div>`;
+  }).join('');
+  document.getElementById('mock-progress-label').textContent = `QUESTION ${mockState.currentIdx+1} OF ${mockState.totalQ}`;
+}
+
+function renderQuestion() {
+  const q = mockState.questions[mockState.currentIdx];
+  document.getElementById('mock-q-type').textContent = q.category || 'Technical';
+  document.getElementById('mock-question').textContent = q.question || q.next_question || 'Loading...';
+  document.getElementById('mock-answer').value = '';
+  document.getElementById('mock-answer-card').style.display = 'block';
+  document.getElementById('mock-final').innerHTML = '';
+}
+
+async function submitAnswer() {
+  const answer = document.getElementById('mock-answer').value.trim();
+  if (!answer) { alert('Please type your answer.'); return; }
+  
+  const btn = document.getElementById('mock-submit-btn');
+  btn.disabled = true; btn.textContent = 'EVALUATING...';
+  document.getElementById('mock-skip-btn').disabled = true;
+  
+  const currentQ = mockState.questions[mockState.currentIdx];
+  mockState.answers.push({ question: currentQ.question || currentQ.next_question, answer });
+  
+  try {
+    const isLast = mockState.currentIdx >= mockState.totalQ - 1;
+    const action = isLast ? 'final' : 'next';
+    const data = await apiCall('/mock-interview', {
+      jd: mockState.jd,
+      previous_qa: mockState.answers,
+      user_answer: answer,
+      action,
+      total_questions: mockState.totalQ,
+      question_number: mockState.currentIdx + 1
+    });
+    mockState.feedbacks.push(data.feedback);
+    
+    if (data.feedback) renderFeedback(data.feedback, answer);
+    
+    if (isLast || action === 'final') {
+      setTimeout(() => renderFinal(data), 1200);
+    } else {
+      mockState.questions.push(data);
+      mockState.currentIdx++;
+      renderMockDots();
+      setTimeout(() => renderQuestion(), 800);
+    }
+  } catch(e) {
+    alert('Error: ' + e.message);
+  }
+  btn.disabled = false; btn.textContent = '✓ SUBMIT ANSWER';
+  document.getElementById('mock-skip-btn').disabled = false;
+}
+
+function skipQuestion() {
+  mockState.answers.push({ question: mockState.questions[mockState.currentIdx]?.question || '', answer: '[Skipped]' });
+  if (mockState.currentIdx >= mockState.totalQ - 1) {
+    renderFinal({ overall_score: 50, strengths:[], improvements:['Skipped questions'] });
+    return;
+  }
+  mockState.currentIdx++;
+  apiCall('/mock-interview', { jd:mockState.jd, previous_qa:mockState.answers, user_answer:'', action:'next', total_questions:mockState.totalQ, question_number:mockState.currentIdx+1 })
+  .then(data => {
+    mockState.questions.push(data);
+    renderMockDots();
+    renderQuestion();
+  }).catch(e => alert('Error: ' + e.message));
+}
+
+function renderFeedback(fb, answer) {
+  const score = fb.score || 70;
+  const scoreColor = score >= 80 ? 'var(--ok)' : score >= 60 ? 'var(--cyan)' : score >= 40 ? 'var(--warn)' : 'var(--err)';
+  const goodHTML = (fb.good_points||[]).map(p=>`<div class="fb-item good">${p}</div>`).join('');
+  const badHTML = (fb.improve_points||[]).map(p=>`<div class="fb-item bad">${p}</div>`).join('');
+  const fbDiv = document.createElement('div');
+  fbDiv.className = 'fb-card';
+  fbDiv.innerHTML = `
+    <div class="fb-hdr">
+      <div class="fb-score-c" style="background:${scoreColor}22;border:2px solid ${scoreColor};color:${scoreColor}">${score}%</div>
+      <div><div class="fb-title">ANSWER FEEDBACK</div><div class="fb-sub">${fb.verdict || 'Good attempt'}</div></div>
+    </div>
+    ${goodHTML ? `<div class="fb-sec">STRENGTHS</div>${goodHTML}` : ''}
+    ${badHTML ? `<div class="fb-sec">IMPROVE</div>${badHTML}` : ''}
+    ${fb.ideal_hint ? `<div class="fb-hint"><strong>💡 IDEAL APPROACH</strong>${fb.ideal_hint}</div>` : ''}`;
+  document.getElementById('mock-feedback-area').appendChild(fbDiv);
+}
+
+function renderFinal(data) {
+  document.getElementById('mock-answer-card').style.display = 'none';
+  const score = data.overall_score || Math.round(mockState.feedbacks.reduce((a,f)=>a+(f?.score||70),0)/Math.max(mockState.feedbacks.length,1));
+  const scoreColor = score >= 80 ? 'var(--ok)' : score >= 60 ? 'var(--cyan)' : score >= 40 ? 'var(--warn)' : 'var(--err)';
+  const verdict = score >= 80 ? '🏆 Outstanding Performance' : score >= 60 ? '✅ Good Performance' : score >= 40 ? '⚠️ Needs Improvement' : '📚 Keep Practicing';
+  const strsHTML = (data.strengths||[]).map(s=>`<div class="f-item ok">${s}</div>`).join('');
+  const impHTML = (data.improvements||[]).map(s=>`<div class="f-item bad">${s}</div>`).join('');
+  document.getElementById('mock-final').innerHTML = `
+    <div class="final-card">
+      <div class="final-title">INTERVIEW COMPLETE</div>
+      <div class="final-score" style="color:${scoreColor}">${score}%</div>
+      <div class="final-sub">${verdict}</div>
+      <div class="final-cols">
+        <div><div class="fcol-title ok">STRENGTHS</div>${strsHTML||'<div class="f-item ok">Attempted all questions</div>'}</div>
+        <div><div class="fcol-title bad">AREAS TO IMPROVE</div>${impHTML||'<div class="f-item bad">Keep practicing regularly</div>'}</div>
+      </div>
+      <div class="btn-row" style="justify-content:center">
+        <button class="btn btn-p" onclick="location.reload()">🔄 NEW SESSION</button>
+        <button class="btn btn-s" onclick="switchTabDirect('prep')">📚 STUDY PLAN</button>
+      </div>
+    </div>`;
+}
+
+function endMock() {
+  if(confirm('End interview session?')) { document.getElementById('mock-arena').classList.remove('active'); document.getElementById('mock-setup').style.display='block'; }
+}
+
+function switchTabDirect(id) {
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  document.querySelectorAll('.tab-btn')[2].classList.add('active');
+}
+</script>
+
+<script>
+/**
+ * Iframe 元素高亮注入脚本
+ * 需要在目标网站中引入此脚本来支持跨域 iframe 高亮功能
+ *
+ * 使用方法：
+ * 1. 将此脚本添加到目标网站的 HTML 中
+ * 2. 或通过浏览器扩展、用户脚本等方式注入
+ */
+
+(function () {
+  "use strict";
+
+  // 检查是否在 iframe 中
+  if (window.self === window.top) {
+    return; // 不在 iframe 中，不执行
+  }
+
+  // 检查是否已经初始化过
+  if (window.__iframeHighlightInitialized) {
+    return;
+  }
+  window.__iframeHighlightInitialized = true;
+  console.log("Iframe 高亮脚本已加载");
+
+  // 创建高亮覆盖层
+  var overlay = document.createElement("div");
+  overlay.id = "iframe-highlight-overlay";
+  overlay.style.cssText = "\n    position: fixed;\n    top: 0;\n    left: 0;\n    width: 100vw;\n    height: 100vh;\n    pointer-events: none;\n    z-index: 999999;\n    overflow: hidden;\n  ";
+
+  // 创建悬停高亮框（虚线边框）
+  var highlightBox = document.createElement("div");
+  highlightBox.id = "iframe-highlight-box";
+  highlightBox.style.cssText = "\n    position: absolute;\n    border: 2px dashed #007AFF;\n    background: rgba(0, 122, 255, 0.08);\n    pointer-events: none;\n    display: none;\n    transition: all 0.1s ease;\n    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.8);\n    border-radius: 2px;\n  ";
+
+  // 创建选中节点的常驻高亮框（实线边框）
+  var selectedBox = document.createElement("div");
+  selectedBox.id = "iframe-selected-box";
+  selectedBox.style.cssText = "\n    position: absolute;\n    border: 2px solid #007AFF;\n    pointer-events: none;\n    display: none;\n    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.9), 0 0 8px rgba(255, 107, 53, 0.4);\n    border-radius: 2px;\n    z-index: 1000000;\n  ";
+
+  // 创建悬停标签显示
+  var tagLabel = document.createElement("div");
+  tagLabel.id = "iframe-tag-label";
+  tagLabel.style.cssText = "\n    position: absolute;\n    background: #007AFF;\n    color: white;\n    padding: 2px 6px;\n    font-size: 11px;\n    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;\n    border-radius: 2px;\n    pointer-events: none;\n    display: none;\n    white-space: nowrap;\n    z-index: 1000001;\n    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);\n    font-weight: 500;\n  ";
+
+  // 创建选中节点标签
+  var selectedLabel = document.createElement("div");
+  selectedLabel.id = "iframe-selected-label";
+  selectedLabel.style.cssText = "\n    position: absolute;\n    background: #007AFF;\n    color: white;\n    padding: 3px 8px;\n    font-size: 11px;\n    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;\n    border-radius: 3px;\n    pointer-events: none;\n    display: none;\n    white-space: nowrap;\n    z-index: 1000002;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);\n    font-weight: 600;\n  ";
+  overlay.appendChild(highlightBox);
+  overlay.appendChild(selectedBox);
+  overlay.appendChild(tagLabel);
+  overlay.appendChild(selectedLabel);
+  document.body.appendChild(overlay);
+
+  // 存储当前选中的元素
+  var selectedElement = null;
+  var highlightEnabled = false;
+
+  // 更新选中元素的高亮显示
+  function updateSelectedHighlight(element) {
+    console.log("updateSelectedHighlight called with:", element);
+    if (!element) {
+      selectedBox.style.display = "none";
+      selectedLabel.style.display = "none";
+      selectedElement = null;
+      console.log("Cleared selected highlight");
+      return;
+    }
+    selectedElement = element;
+    var rect = element.getBoundingClientRect();
+    console.log("Selected element rect:", rect);
+
+    // 更新选中高亮框位置
+    selectedBox.style.display = "block";
+    selectedBox.style.left = "".concat(rect.left - 2, "px");
+    selectedBox.style.top = "".concat(rect.top - 2, "px");
+    selectedBox.style.width = "".concat(rect.width + 4, "px");
+    selectedBox.style.height = "".concat(rect.height + 4, "px");
+
+    // 更新选中标签位置和内容
+    selectedLabel.style.display = "block";
+    selectedLabel.textContent = "\u2713 <".concat(element.tagName.toLowerCase(), ">");
+
+    // 计算标签位置，确保不超出视窗
+    var labelTop = rect.top - 28;
+    var labelLeft = rect.left;
+
+    // 如果标签会超出顶部，显示在元素下方
+    if (labelTop < 5) {
+      labelTop = rect.bottom + 5;
+    }
+
+    // 如果标签会超出右侧，向左调整
+    var labelWidth = selectedLabel.offsetWidth || 100; // 预估宽度
+    if (labelLeft + labelWidth > window.innerWidth - 10) {
+      labelLeft = window.innerWidth - labelWidth - 10;
+    }
+    selectedLabel.style.left = "".concat(Math.max(5, labelLeft), "px");
+    selectedLabel.style.top = "".concat(labelTop, "px");
+    console.log("Selected highlight positioned at:", {
+      left: selectedBox.style.left,
+      top: selectedBox.style.top,
+      width: selectedBox.style.width,
+      height: selectedBox.style.height
+    });
+  }
+  function getElementSelector(element) {
+    if (!(element instanceof Element)) throw new Error('Argument must be a DOM element');
+    var segments = [];
+    var current = element;
+    while (current !== document.documentElement) {
+      var selector = '';
+      // 优先检查唯一ID
+      if (current.id && document.querySelectorAll("#".concat(current.id)).length === 1) {
+        segments.unshift("#".concat(current.id));
+        break; // ID唯一，无需继续向上
+      }
+
+      // 生成类名选择器（取第一个有效类名）
+      var classes = Array.from(current.classList).filter(function (c) {
+        return !c.startsWith('js-');
+      });
+      var className = classes.length > 0 ? ".".concat(classes[0]) : '';
+
+      // 生成位置索引（nth-child）
+      var tag = current.tagName.toLowerCase();
+      if (!className) {
+        var siblings = Array.from(current.parentNode.children);
+        var index = siblings.findIndex(function (el) {
+          return el === current;
+        }) + 1;
+        selector = "".concat(tag, ":nth-child(").concat(index, ")");
+      } else {
+        selector = className;
+      }
+      segments.unshift(selector);
+      current = current.parentElement;
+    }
+
+    // 处理根元素
+    if (current === document.documentElement) {
+      segments.unshift('html');
+    }
+    return segments.join(' > ');
+  }
+
+  // 获取元素文本内容
+  function getElementText(element) {
+    var _element$textContent;
+    if (element.tagName === "INPUT") {
+      return element.value || element.placeholder || "";
+    }
+    if (element.tagName === "TEXTAREA") {
+      return element.value || element.placeholder || "";
+    }
+    var text = ((_element$textContent = element.textContent) === null || _element$textContent === void 0 ? void 0 : _element$textContent.trim()) || "";
+    return text.length > 50 ? text.substring(0, 50) + "..." : text;
+  }
+
+  // 获取元素属性信息
+  function getElementAttributes(element) {
+    var attrs = {};
+    for (var i = 0; i < element.attributes.length; i++) {
+      var attr = element.attributes[i];
+      attrs[attr.name] = attr.value;
+    }
+    return attrs;
+  }
+
+  // 鼠标悬停事件处理
+  function handleMouseOver(e) {
+    if (!highlightEnabled) return;
+    var target = e.target;
+    if (!target || target === overlay || target === highlightBox || target === tagLabel || target === selectedBox || target === selectedLabel) {
+      return;
+    }
+
+    // 避免高亮 html 和 body 元素
+    if (target === document.documentElement || target === document.body) {
+      return;
+    }
+
+    // 如果是已选中的元素，不显示悬停高亮
+    if (target === selectedElement) {
+      highlightBox.style.display = "none";
+      tagLabel.style.display = "none";
+      return;
+    }
+    var rect = target.getBoundingClientRect();
+    var selector = getElementSelector(target);
+    var text = getElementText(target);
+    var attributes = getElementAttributes(target);
+
+    // 更新悬停高亮框位置
+    highlightBox.style.display = "block";
+    highlightBox.style.left = "".concat(rect.left - 2, "px");
+    highlightBox.style.top = "".concat(rect.top - 2, "px");
+    highlightBox.style.width = "".concat(rect.width + 4, "px");
+    highlightBox.style.height = "".concat(rect.height + 4, "px");
+
+    // 更新标签位置和内容
+    tagLabel.style.display = "block";
+    tagLabel.textContent = "<".concat(target.tagName.toLowerCase(), ">");
+
+    // 计算标签位置，确保不超出视窗
+    var labelTop = rect.top - 22;
+    var labelLeft = rect.left;
+
+    // 如果标签会超出顶部，显示在元素下方
+    if (labelTop < 0) {
+      labelTop = rect.bottom + 5;
+    }
+
+    // 如果标签会超出右侧，向左调整
+    if (labelLeft + tagLabel.offsetWidth > window.innerWidth) {
+      labelLeft = window.innerWidth - tagLabel.offsetWidth - 5;
+    }
+    tagLabel.style.left = "".concat(Math.max(0, labelLeft), "px");
+    tagLabel.style.top = "".concat(labelTop, "px");
+
+    // 发送消息到父窗口
+    var elementInfo = {
+      tagName: target.tagName.toLowerCase(),
+      rect: {
+        left: rect.left,
+        top: rect.top,
+        right: rect.right,
+        bottom: rect.bottom,
+        width: rect.width,
+        height: rect.height,
+        x: rect.x,
+        y: rect.y
+      },
+      selector: selector,
+      text: text,
+      attributes: attributes,
+      url: window.location.href,
+      path: window.location.pathname,
+      timestamp: Date.now()
+    };
+    try {
+      window.parent.postMessage({
+        type: "iframe-element-hover",
+        data: elementInfo,
+        source: "iframe-highlight-injector"
+      }, "*");
+    } catch (error) {
+      console.warn("无法发送消息到父窗口:", error);
+    }
+  }
+
+  // 鼠标离开事件处理
+  function handleMouseOut(e) {
+    if (!highlightEnabled) return;
+    var relatedTarget = e.relatedTarget;
+
+    // 如果鼠标移动到高亮相关元素上，不隐藏高亮
+    if (relatedTarget && (relatedTarget === highlightBox || relatedTarget === tagLabel || relatedTarget === overlay || relatedTarget === selectedBox || relatedTarget === selectedLabel)) {
+      return;
+    }
+    highlightBox.style.display = "none";
+    tagLabel.style.display = "none";
+    try {
+      window.parent.postMessage({
+        type: "iframe-element-hover",
+        data: null,
+        source: "iframe-highlight-injector"
+      }, "*");
+    } catch (error) {
+      console.warn("无法发送消息到父窗口:", error);
+    }
+  }
+
+  // 点击事件处理
+  function handleClick(e) {
+    var target = e.target;
+    if (!target || target === overlay || target === highlightBox || target === tagLabel || target === selectedBox || target === selectedLabel) {
+      return;
+    }
+
+    // 避免处理 html 和 body 元素
+    if (target === document.documentElement || target === document.body) {
+      return;
+    }
+
+    // 检查是否是交互元素，这些元素需要保留默认行为
+    var isInteractiveElement = ['input', 'textarea', 'select', 'button', 'a'].includes(target.tagName.toLowerCase());
+
+    // 如果高亮功能启用，对于非交互元素阻止默认行为和事件传播
+    if (highlightEnabled) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    var rect = target.getBoundingClientRect();
+    var selector = getElementSelector(target);
+    var text = getElementText(target);
+    var attributes = getElementAttributes(target);
+    console.log("Element clicked:", {
+      tagName: target.tagName,
+      selector: selector,
+      rect: rect
+    });
+
+    // 立即更新选中高亮
+    updateSelectedHighlight(target);
+
+    // 隐藏悬停高亮，因为现在是选中状态
+    highlightBox.style.display = "none";
+    tagLabel.style.display = "none";
+    var elementInfo = {
+      tagName: target.tagName.toLowerCase(),
+      rect: {
+        left: rect.left,
+        top: rect.top,
+        right: rect.right,
+        bottom: rect.bottom,
+        width: rect.width,
+        height: rect.height,
+        x: rect.x,
+        y: rect.y
+      },
+      selector: selector,
+      text: text,
+      attributes: attributes,
+      url: window.location.href,
+      path: window.location.pathname,
+      timestamp: Date.now()
+    };
+    try {
+      window.parent.postMessage({
+        type: "iframe-element-click",
+        data: elementInfo,
+        source: "iframe-highlight-injector"
+      }, "*");
+    } catch (error) {
+      console.warn("无法发送消息到父窗口:", error);
+    }
+  }
+
+  // 监听来自父窗口的消息
+  function handleParentMessage(event) {
+    console.log("Received message from parent:", event.data);
+    if (event.data.type === "iframe-highlight-toggle") {
+      var enabled = event.data.enabled;
+      console.log("Highlight toggle:", enabled);
+      if (enabled) {
+        enableHighlight();
+      } else {
+        disableHighlight();
+      }
+    } else if (event.data.type === "enable-iframe-highlight") {
+      console.log("Enable iframe highlight");
+      enableHighlight();
+    } else if (event.data.type === "disable-iframe-highlight") {
+      console.log("Disable iframe highlight");
+      disableHighlight();
+    } else if (event.data.type === "toggle-iframe-highlight") {
+      var _enabled = event.data.enabled !== undefined ? event.data.enabled : !highlightEnabled;
+      console.log("Toggle iframe highlight to:", _enabled);
+      if (_enabled) {
+        enableHighlight();
+      } else {
+        disableHighlight();
+      }
+    } else if (event.data.type === "update-selected-element") {
+      var selector = event.data.selector;
+      console.log("Update selected element with selector:", selector);
+      if (selector) {
+        try {
+          var element = document.querySelector(selector);
+          console.log("Found element by selector:", element);
+          updateSelectedHighlight(element);
+        } catch (error) {
+          console.warn("Failed to select element:", error);
+          updateSelectedHighlight(null);
+        }
+      } else {
+        updateSelectedHighlight(null);
+      }
+    } else if (event.data.type === "clear-selected-element") {
+      console.log("Clear selected element");
+      updateSelectedHighlight(null);
+    }
+  }
+
+  // 启用高亮功能
+  function enableHighlight() {
+    console.log("Enabling highlight");
+    document.addEventListener("mouseover", handleMouseOver, true);
+    document.addEventListener("mouseout", handleMouseOut, true);
+    document.addEventListener("click", handleClick, true);
+    highlightEnabled = true;
+    overlay.style.display = "block";
+  }
+
+  // 禁用高亮功能
+  function disableHighlight() {
+    console.log("Disabling highlight");
+    highlightEnabled = false;
+    // 保持事件监听器，但通过 highlightEnabled 变量控制行为
+    // 这样可以保留选中状态的显示
+    highlightBox.style.display = "none";
+    tagLabel.style.display = "none";
+    // 不隐藏 selectedBox 和 selectedLabel，保留选中状态
+  }
+
+  // 完全禁用高亮功能（移除所有监听器）
+  function fullyDisableHighlight() {
+    console.log("Fully disabling highlight");
+    highlightEnabled = false;
+    document.removeEventListener("mouseover", handleMouseOver, true);
+    document.removeEventListener("mouseout", handleMouseOut, true);
+    document.removeEventListener("click", handleClick, true);
+    overlay.style.display = "none";
+    highlightBox.style.display = "none";
+    tagLabel.style.display = "none";
+    selectedBox.style.display = "none";
+    selectedLabel.style.display = "none";
+  }
+
+  // 添加事件监听
+  enableHighlight();
+  window.addEventListener("message", handleParentMessage);
+
+  // 暴露全局函数供外部调用
+  window.__iframeHighlightControl = {
+    enable: enableHighlight,
+    disable: disableHighlight,
+    fullyDisable: fullyDisableHighlight,
+    isEnabled: function isEnabled() {
+      return highlightEnabled;
+    },
+    getSelectedElement: function getSelectedElement() {
+      return selectedElement;
+    },
+    updateSelected: updateSelectedHighlight,
+    // 通过消息发送开关控制
+    sendToggleMessage: function sendToggleMessage(enabled) {
+      window.parent.postMessage({
+        type: 'iframe-highlight-status',
+        enabled: enabled || highlightEnabled,
+        source: 'iframe-highlight-injector'
+      }, '*');
+    }
+  };
+
+  // 通知父窗口脚本已加载
+  try {
+    window.parent.postMessage({
+      type: "iframe-highlight-ready",
+      data: {
+        url: window.location.href,
+        userAgent: navigator.userAgent,
+        timestamp: Date.now()
+      },
+      source: "iframe-highlight-injector"
+    }, "*");
+  } catch (error) {
+    console.warn("无法发送就绪消息到父窗口:", error);
+  }
+
+  // 清理函数
+  window.__iframeHighlightCleanup = function () {
+    fullyDisableHighlight();
+    window.removeEventListener("message", handleParentMessage);
+    if (overlay.parentElement) {
+      overlay.parentElement.removeChild(overlay);
+    }
+    delete window.__iframeHighlightInitialized;
+    delete window.__iframeHighlightCleanup;
+  };
+})();
+
+</script>
+</body>
+</html>
