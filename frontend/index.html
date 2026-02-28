@@ -339,22 +339,15 @@ textarea::placeholder,input::placeholder{color:var(--txt3)}
 <script>
 const API = 'https://interview-prep-k8ei.onrender.com';
 
-// ASYNC JOB HELPER — posts request, polls until done, returns data
+// API HELPER — direct call to backend
 async function apiCall(endpoint, payload) {
   const r = await fetch(API + endpoint, {
-    method: 'POST', headers: {'Content-Type':'application/json'},
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
     body: JSON.stringify(payload)
   });
-  const { job_id } = await r.json();
-  // Poll until done
-  for (let i = 0; i < 120; i++) {
-    await new Promise(res => setTimeout(res, 1000));
-    const pr = await fetch(API + '/job/' + job_id);
-    const job = await pr.json();
-    if (job.status === 'done') return job.result;
-    if (job.status === 'error') throw new Error(job.result?.error || 'Job failed');
-  }
-  throw new Error('Request timed out');
+  if (!r.ok) throw new Error('Server error: ' + r.status);
+  return await r.json();
 }
 
 // TAB SWITCHING
